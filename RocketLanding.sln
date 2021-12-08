@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketLanding.Lib", "RocketLanding.Lib\RocketLanding.Lib.csproj", "{4091B32F-8FA2-4B94-ABB6-82B8E773366E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocketLanding.Tests", "RocketLanding.Tests\RocketLanding.Tests.csproj", "{8F270C09-5CD3-420B-8DA9-2A117AA82F75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4091B32F-8FA2-4B94-ABB6-82B8E773366E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4091B32F-8FA2-4B94-ABB6-82B8E773366E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4091B32F-8FA2-4B94-ABB6-82B8E773366E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4091B32F-8FA2-4B94-ABB6-82B8E773366E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F270C09-5CD3-420B-8DA9-2A117AA82F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F270C09-5CD3-420B-8DA9-2A117AA82F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F270C09-5CD3-420B-8DA9-2A117AA82F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F270C09-5CD3-420B-8DA9-2A117AA82F75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24F922E5-1459-4551-AA55-6AE9193BA79B}
+	EndGlobalSection
+EndGlobal
