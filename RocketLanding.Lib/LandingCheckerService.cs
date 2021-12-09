@@ -7,7 +7,7 @@ namespace RocketLanding.Lib
     {
         public static Rectangle LandingArea { get; private set; }
         public Rectangle LandingPlatform { get; private set; }
-        public LastChecking LastChecking { get; private set; }
+        public LastCheckedPosition LastCheckedPosition { get; private set; }
         public int SeparationUnits { get; private set; }
         public int SeparationDiameter { get; private set; }
 
@@ -34,7 +34,7 @@ namespace RocketLanding.Lib
             LandingPlatform = landingPlatform;
             SeparationUnits = separationUnits;
             SeparationDiameter = (SeparationUnits * 2) + 1;
-            LastChecking = new LastChecking();
+            LastCheckedPosition = new LastCheckedPosition();
         }
 
         /// <summary>
@@ -49,11 +49,11 @@ namespace RocketLanding.Lib
 
             lock (_locker)
             {
-                if (LastChecking.CanClash(point, rocketId))
+                if (LastCheckedPosition.CanClashWithPoint(point, rocketId))
                     return LandingStatus.Clash.ToDescriptionString();
 
                 var newSpot = new Rectangle(point.X - SeparationUnits, point.Y - SeparationUnits, SeparationDiameter, SeparationDiameter);
-                LastChecking.Update(newSpot, rocketId);
+                LastCheckedPosition.Update(newSpot, rocketId);
             }
 
             return LandingStatus.OkForLanding.ToDescriptionString();

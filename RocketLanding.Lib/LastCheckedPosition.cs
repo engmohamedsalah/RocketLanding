@@ -3,13 +3,13 @@ using System.Drawing;
 
 namespace RocketLanding.Lib
 {
-    public class LastChecking
+    public class LastCheckedPosition
     {
-        public Rectangle LastCheckedSpot { get; private set; }
+        public   Rectangle LastCheckedArea { get; private set; }
         public Guid RocketId { get; private set; }
-        public LastChecking()
+        public LastCheckedPosition()
         {
-            LastCheckedSpot = Rectangle.Empty;
+            LastCheckedArea = Rectangle.Empty;
             RocketId = Guid.Empty;
         }
         /// <summary>
@@ -20,9 +20,9 @@ namespace RocketLanding.Lib
         /// <returns>
         ///   <c>true</c> if this rocket can clash at a specified point; otherwise, <c>false</c>.
         /// </returns>
-        public bool CanClash(Point point, Guid rocketId)
+        public bool CanClashWithPoint(Point point, Guid rocketId)
         {
-            return LastCheckedSpot.Contains(point) && rocketId != RocketId;
+            return LastCheckedArea.Contains(point) && rocketId != RocketId;
             
         }
         /// <summary>
@@ -32,7 +32,7 @@ namespace RocketLanding.Lib
         /// <param name="rocketId">The rocket identifier.</param>
         public void Update(Rectangle spot, Guid rocketId)
         {
-            LastCheckedSpot = spot;
+            LastCheckedArea = spot;
             RocketId = rocketId;
         }
     }
