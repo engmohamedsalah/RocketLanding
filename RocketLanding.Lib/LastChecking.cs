@@ -15,10 +15,10 @@ namespace RocketLanding.Lib
         /// <summary>
         /// Determines whether this instance can clash the specified point.
         /// </summary>
-        /// <param name="point">The point.</param>
+        /// <param name="point">The point(X,Y).</param>
         /// <param name="rocketId">The rocket identifier.</param>
         /// <returns>
-        ///   <c>true</c> if this instance can clash the specified point; otherwise, <c>false</c>.
+        ///   <c>true</c> if this rocket can clash at a specified point; otherwise, <c>false</c>.
         /// </returns>
         public bool CanClash(Point point, Guid rocketId)
         {
@@ -26,7 +26,7 @@ namespace RocketLanding.Lib
             
         }
         /// <summary>
-        /// Updates the specified spot.
+        /// Updates the last checking spot.
         /// </summary>
         /// <param name="spot">The spot.</param>
         /// <param name="rocketId">The rocket identifier.</param>
