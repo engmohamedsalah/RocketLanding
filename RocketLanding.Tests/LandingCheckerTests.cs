@@ -97,9 +97,10 @@ namespace RocketLanding.Tests
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 3, 3);
             var checker = new LandingChecker(landingPlatform);
+            var rocketId = _fixture.Create<Guid>();
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y));
+            var result = checker.CheckLanding(new Point(x, y), rocketId);
 
             //Assert
             Assert.AreEqual(result, LandingStatus.OutOfPlatform.ToDescriptionString());
@@ -115,9 +116,10 @@ namespace RocketLanding.Tests
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
             var checker = new LandingChecker(landingPlatform);
+            var rocketId = _fixture.Create<Guid>();
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y));
+            var result = checker.CheckLanding(new Point(x, y), rocketId);
 
             //Assert
             Assert.AreEqual(result, LandingStatus.OkForLanding.ToDescriptionString());
@@ -133,14 +135,42 @@ namespace RocketLanding.Tests
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
             var checker = new LandingChecker(landingPlatform);
-            var validPointResult = checker.CheckLanding(new Point(6, 6));
+            var rocketId1 = _fixture.Create<Guid>();
+            var rocketId2 = _fixture.Create<Guid>();
+
+
+            var validPointResult = checker.CheckLanding(new Point(6, 6), rocketId1);
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y));
+            var result = checker.CheckLanding(new Point(x, y), rocketId2);
 
             //Assert
             Assert.AreEqual(validPointResult, LandingStatus.OkForLanding.ToDescriptionString());
             Assert.AreEqual(result, LandingStatus.Clash.ToDescriptionString());
+        }
+
+        [TestMethod]
+        [DataRow(5, 5)]
+        [DataRow(5, 6)]
+        [DataRow(6, 5)]
+        [DataRow(6, 6)]
+        public void CheckLanding__SameRocketManyTime_ShouldReturnOkLandingMessage(int x, int y)
+        {
+            // Arrange
+            var landingPlatform = new Rectangle(5, 5, 10, 10);
+            var checker = new LandingChecker(landingPlatform);
+            var rocketId1 = _fixture.Create<Guid>();
+
+
+
+            // Act
+            var firstResult = checker.CheckLanding(new Point(6, 6), rocketId1);
+            var secondresult = checker.CheckLanding(new Point(x, y), rocketId1);
+            
+
+            //Assert
+            Assert.AreEqual(firstResult, LandingStatus.OkForLanding.ToDescriptionString());
+            Assert.AreEqual(secondresult, LandingStatus.OkForLanding.ToDescriptionString());
         }
 
         [TestMethod]
@@ -149,11 +179,13 @@ namespace RocketLanding.Tests
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
             var checker = new LandingChecker(landingPlatform);
+            var rocketId1 = _fixture.Create<Guid>();
+            var rocketId2 = _fixture.Create<Guid>();
 
             // Act
-            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6)));
+            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId1));
 
-            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6)));
+            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId2));
 
             Task.WaitAll(rocket1, rocket2);
 
@@ -176,11 +208,14 @@ namespace RocketLanding.Tests
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
             var checker = new LandingChecker(landingPlatform);
+            var rocketId1 = _fixture.Create<Guid>();
+            var rocketId2 = _fixture.Create<Guid>();
+
 
             // Act
-            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6)));
+            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId1));
 
-            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(12, 13)));
+            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(12, 13),rocketId2));
 
             Task.WaitAll(rocket1, rocket2);
 
@@ -197,8 +232,8 @@ namespace RocketLanding.Tests
         {
             return _fixture
                 .Build<Rectangle>()
-                .With(a => a.X, _rand.Next(0, Parameters.DefaultWidth))
-                .With(a => a.Y, _rand.Next(0, Parameters.DefaultHight))
+                .With(a => a.X, _rand.Next(0, DefaultParameters.DefaultWidth))
+                .With(a => a.Y, _rand.Next(0, DefaultParameters.DefaultHight))
                 .Create();
         }
 

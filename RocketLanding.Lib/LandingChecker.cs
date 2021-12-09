@@ -7,7 +7,7 @@ namespace RocketLanding.Lib
     {
         public static Rectangle LandingArea { get; private set; }
         public Rectangle LandingPlatform { get; private set; }
-        public Rectangle LastCheckedSpot { get; private set; }
+        public LastChecking LastChecking { get; private set; }
         public int SeparationUnits { get; private set; }
         public int SeparationDiameter { get; private set; }
 
@@ -29,12 +29,12 @@ namespace RocketLanding.Lib
         /// <param name="separationUnits">The separation units.</param>
         public LandingChecker(Rectangle landingArea, Rectangle landingPlatform, int separationUnits = 1)
         {
-            CheckAreaParameters(landingArea, landingPlatform);
+            CheckArguments(landingArea, landingPlatform);
             LandingArea = landingArea;
             LandingPlatform = landingPlatform;
             SeparationUnits = separationUnits;
             SeparationDiameter = (SeparationUnits * 2) + 1;
-            LastCheckedSpot = Rectangle.Empty;
+            LastChecking = new LastChecking();
         }
 
         /// <summary>
@@ -42,19 +42,18 @@ namespace RocketLanding.Lib
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns></returns>
-        public string CheckLanding(Point point)
+        public string CheckLanding(Point point,Guid rocketId)
         {
             if (!LandingPlatform.Contains(point))
                 return LandingStatus.OutOfPlatform.ToDescriptionString();
 
             lock (_locker)
             {
-                if (LastCheckedSpot.Contains(point))
+                if (LastChecking.CanClash(point, rocketId))
                     return LandingStatus.Clash.ToDescriptionString();
 
-                //if the last point at the edge the lastCheckPoint will include some invalid area
-                //but because the is check of validity point before so no worries about in correct message
-                LastCheckedSpot = new Rectangle(point.X - SeparationUnits, point.Y - SeparationUnits, SeparationDiameter, SeparationDiameter);
+                var newSpot = new Rectangle(point.X - SeparationUnits, point.Y - SeparationUnits, SeparationDiameter, SeparationDiameter);
+                LastChecking.Update(newSpot, rocketId);
             }
 
             return LandingStatus.OkForLanding.ToDescriptionString();
@@ -63,16 +62,16 @@ namespace RocketLanding.Lib
         #region private methods
 
         /// <summary>
-        /// Creates the landing area with default size.
+        /// Creates the landing area with default size. 100*100
         /// </summary>
         /// <returns></returns>
         private static Rectangle CreateLandingAreaDefault()
         {
-            return new Rectangle(Parameters.DefaultX, Parameters.DefaultX, Parameters.DefaultWidth, Parameters.DefaultHight);
+            return new Rectangle(DefaultParameters.DefaultX, DefaultParameters.DefaultX, DefaultParameters.DefaultWidth, DefaultParameters.DefaultHight);
         }
 
         /// <summary>
-        /// Checks the area parameters.
+        /// Checks Arguments.
         /// </summary>
         /// <param name="landingArea">The landing area.</param>
         /// <param name="landingPlatform">The landing platform.</param>
@@ -85,7 +84,7 @@ namespace RocketLanding.Lib
         /// or
         /// SeparationUnits
         /// </exception>
-        private void CheckAreaParameters(Rectangle landingArea, Rectangle landingPlatform)
+        private void CheckArguments(Rectangle landingArea, Rectangle landingPlatform)
         {
             if (landingArea.Height == 0 || landingArea.Width == 0)
                 throw new ArgumentOutOfRangeException(nameof(landingArea), ErrorMessage.LandingAreaSizeError);
