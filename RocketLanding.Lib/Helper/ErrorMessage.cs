@@ -1,5 +1,8 @@
 ﻿namespace RocketLanding.Lib
 {
+    /// <summary>
+    /// this class contains error messages
+    /// </summary>
     public class ErrorMessage
     {
         public const string LandingAreaSizeError = "Landing Area Height or Width is 0";

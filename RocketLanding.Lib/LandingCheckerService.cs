@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace RocketLanding.Lib
 {
-    public class LandingChecker
+    public class LandingCheckerService
     {
         public static Rectangle LandingArea { get; private set; }
         public Rectangle LandingPlatform { get; private set; }
@@ -14,20 +14,20 @@ namespace RocketLanding.Lib
         private static readonly object _locker = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LandingChecker"/> class.
+        /// Initializes a new instance of the <see cref="LandingCheckerService"/> class.
         /// </summary>
         /// <param name="landingPlatform">The landing platform.</param>
-        public LandingChecker(Rectangle landingPlatform) :
-            this(CreateLandingAreaDefault(), landingPlatform)
+        public LandingCheckerService(Rectangle landingPlatform, int separationUnits = 1) :
+            this(CreateDefaultLandingArea(), landingPlatform, separationUnits)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LandingChecker"/> class.
+        /// Initializes a new instance of the <see cref="LandingCheckerService"/> class.
         /// </summary>
         /// <param name="landingArea">The landing area.</param>
         /// <param name="landingPlatform">The landing platform.</param>
         /// <param name="separationUnits">The separation units.</param>
-        public LandingChecker(Rectangle landingArea, Rectangle landingPlatform, int separationUnits = 1)
+        public LandingCheckerService(Rectangle landingArea, Rectangle landingPlatform, int separationUnits = 1)
         {
             CheckArguments(landingArea, landingPlatform);
             LandingArea = landingArea;
@@ -42,7 +42,7 @@ namespace RocketLanding.Lib
         /// </summary>
         /// <param name="point">The point.</param>
         /// <returns></returns>
-        public string CheckLanding(Point point,Guid rocketId)
+        public string CheckLandingAvailability(Point point,Guid rocketId)
         {
             if (!LandingPlatform.Contains(point))
                 return LandingStatus.OutOfPlatform.ToDescriptionString();
@@ -65,7 +65,7 @@ namespace RocketLanding.Lib
         /// Creates the landing area with default size. 100*100
         /// </summary>
         /// <returns></returns>
-        private static Rectangle CreateLandingAreaDefault()
+        private static Rectangle CreateDefaultLandingArea()
         {
             return new Rectangle(DefaultParameters.DefaultX, DefaultParameters.DefaultX, DefaultParameters.DefaultWidth, DefaultParameters.DefaultHight);
         }

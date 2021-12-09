@@ -1,5 +1,8 @@
 ﻿namespace RocketLanding.Lib
 {
+    /// <summary>
+    /// this class contains default values
+    /// </summary>
     public class DefaultParameters
     {
         public const int DefaultWidth = 100;

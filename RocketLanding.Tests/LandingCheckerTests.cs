@@ -34,7 +34,7 @@ namespace RocketLanding.Tests
             var landingPlatform = CreateValidRandomLanding();
 
             // Act
-            new LandingChecker(landingArea, landingPlatform);
+            new LandingCheckerService(landingArea, landingPlatform);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException), ErrorMessage.LandingPlatformSizeError)]
@@ -46,7 +46,7 @@ namespace RocketLanding.Tests
             var landingArea = CreateValidRandomLanding();
 
             // Act
-            new LandingChecker(landingArea, landingPlatform);
+            new LandingCheckerService(landingArea, landingPlatform);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException), ErrorMessage.LandingPlatformOutOfArea)]
@@ -58,7 +58,7 @@ namespace RocketLanding.Tests
             var landingArea = CreateValidRandomLanding();
             var landingPlatform = new Rectangle(landingArea.X - _rand.Next(), landingArea.Y - _rand.Next(), landingArea.Width / 5, landingArea.Width / 5);
             // Act
-            new LandingChecker(landingArea, landingPlatform);
+            new LandingCheckerService(landingArea, landingPlatform);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException), ErrorMessage.LandingPlatformOutOfArea)]
@@ -70,7 +70,7 @@ namespace RocketLanding.Tests
             var landingArea = CreateValidRandomLanding();
             var landingPlatform = CreateValidRandomLanding();
             // Act
-            new LandingChecker(landingArea, landingPlatform, -10);
+            new LandingCheckerService(landingArea, landingPlatform, -10);
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace RocketLanding.Tests
             var landingPlatform = CreateValidRandomLanding();
 
             // Act
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
 
             //Assert
             Assert.AreEqual(checker.LandingPlatform, landingPlatform);
@@ -96,11 +96,11 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 3, 3);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId = _fixture.Create<Guid>();
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y), rocketId);
+            var result = checker.CheckLandingAvailability(new Point(x, y), rocketId);
 
             //Assert
             Assert.AreEqual(result, LandingStatus.OutOfPlatform.ToDescriptionString());
@@ -115,11 +115,11 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId = _fixture.Create<Guid>();
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y), rocketId);
+            var result = checker.CheckLandingAvailability(new Point(x, y), rocketId);
 
             //Assert
             Assert.AreEqual(result, LandingStatus.OkForLanding.ToDescriptionString());
@@ -134,15 +134,15 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId1 = _fixture.Create<Guid>();
             var rocketId2 = _fixture.Create<Guid>();
 
 
-            var validPointResult = checker.CheckLanding(new Point(6, 6), rocketId1);
+            var validPointResult = checker.CheckLandingAvailability(new Point(6, 6), rocketId1);
 
             // Act
-            var result = checker.CheckLanding(new Point(x, y), rocketId2);
+            var result = checker.CheckLandingAvailability(new Point(x, y), rocketId2);
 
             //Assert
             Assert.AreEqual(validPointResult, LandingStatus.OkForLanding.ToDescriptionString());
@@ -158,14 +158,14 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId1 = _fixture.Create<Guid>();
 
 
 
             // Act
-            var firstResult = checker.CheckLanding(new Point(6, 6), rocketId1);
-            var secondresult = checker.CheckLanding(new Point(x, y), rocketId1);
+            var firstResult = checker.CheckLandingAvailability(new Point(6, 6), rocketId1);
+            var secondresult = checker.CheckLandingAvailability(new Point(x, y), rocketId1);
             
 
             //Assert
@@ -178,14 +178,14 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId1 = _fixture.Create<Guid>();
             var rocketId2 = _fixture.Create<Guid>();
 
             // Act
-            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId1));
+            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLandingAvailability(new Point(6, 6), rocketId1));
 
-            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId2));
+            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLandingAvailability(new Point(6, 6), rocketId2));
 
             Task.WaitAll(rocket1, rocket2);
 
@@ -207,15 +207,15 @@ namespace RocketLanding.Tests
         {
             // Arrange
             var landingPlatform = new Rectangle(5, 5, 10, 10);
-            var checker = new LandingChecker(landingPlatform);
+            var checker = new LandingCheckerService(landingPlatform);
             var rocketId1 = _fixture.Create<Guid>();
             var rocketId2 = _fixture.Create<Guid>();
 
 
             // Act
-            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(6, 6), rocketId1));
+            Task<string> rocket1 = Task.Factory.StartNew(() => checker.CheckLandingAvailability(new Point(6, 6), rocketId1));
 
-            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLanding(new Point(12, 13),rocketId2));
+            Task<string> rocket2 = Task.Factory.StartNew(() => checker.CheckLandingAvailability(new Point(12, 13),rocketId2));
 
             Task.WaitAll(rocket1, rocket2);
 
